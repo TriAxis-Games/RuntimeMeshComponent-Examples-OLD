@@ -1,6 +1,3 @@
 [submodule "Plugins\\RuntimeMeshComponent"]
 	path = Plugins\\RuntimeMeshComponent
 	url = https://github.com/Koderz/UE4RuntimeMeshComponent.git
-[submodule "Plugins/RuntimeMeshComponent"]
-	path = Plugins/RuntimeMeshComponent
-	url = https://github.com/Koderz/UE4RuntimeMeshComponent.git
