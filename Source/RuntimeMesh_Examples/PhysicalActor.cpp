@@ -49,7 +49,7 @@ APhysicalActor::APhysicalActor() : Size(0.0f)
 	Triangles.SetNum(30000);
 	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	MeshComponent->CreateMeshSection<MyVertex>(0, Vertices, Triangles, false, EUpdateFrequency::Frequent);
+	//MeshComponent->CreateMeshSection<MyVertex>(0, Vertices, Triangles, false, EUpdateFrequency::Frequent);
 
 
 
@@ -77,7 +77,7 @@ void APhysicalActor::Tick( float DeltaTime )
 	TArray<MyVertex> TempVertices = Vertices;
 	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	MeshComponent->UpdateMeshSection<MyVertex>(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
+	//MeshComponent->UpdateMeshSection<MyVertex>(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
 
 
 	Super::Tick( DeltaTime );
