@@ -6,7 +6,7 @@
 
 
 
-void GenerateBoxMesh(const FVector& Size, TArray<MyVertex>& Vertices, TArray<int32>& Triangles)
+void GenerateBoxMesh(const FVector& Size, TArray<MyVertex>& Vertices, TArray<FVector>& VertexPositions, TArray<MyDualVertex>& VertexData, TArray<int32>& Triangles)
 {
 	Vertices.Empty();
 	Triangles.Empty();
@@ -21,12 +21,20 @@ void GenerateBoxMesh(const FVector& Size, TArray<MyVertex>& Vertices, TArray<int
 
 
 	Vertices.SetNum(Positions.Num());
+	VertexData.SetNum(Positions.Num());
+	VertexPositions.SetNum(Positions.Num());
 	for (int32 Index = 0; Index < Positions.Num(); Index++)
 	{
 		Vertices[Index].Position = Positions[Index];
 		Vertices[Index].Normal = Normals[Index];
 		Vertices[Index].Tangent = Tangents[Index].TangentX;
-		//Vertices[Index].UV0 = UVs[Index];
+		Vertices[Index].UV0 = UVs[Index];
+
+		VertexData[Index].Normal = Normals[Index];
+		VertexData[Index].Tangent = Tangents[Index].TangentX;
+		VertexData[Index].UV0 = UVs[Index];
+
+		VertexPositions[Index] = Positions[Index];
 	}
 
 }
@@ -39,18 +47,25 @@ APhysicalActor::APhysicalActor() : Size(0.0f)
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = MeshComponent = CreateDefaultSubobject<URuntimeMeshComponent>(TEXT("MeshObject"));
+	MeshComponent->bShouldSerializeMeshData = false;
+
 
 // 	TArray<MyVertex> Vertices;
 // 	TArray<int32> Triangles;
 // 
-// 	GenerateBoxMesh(FVector(100, 100, 100), Vertices, Triangles);
+ 	GenerateBoxMesh(FVector(100, 100, 100), Vertices, Positions, VertexData, Triangles);
+ 
+//   	Vertices.SetNumZeroed(20000);
+//   	VertexData.SetNumZeroed(20000);
+//   	Positions.SetNumZeroed(20000);
+//   	Triangles.SetNum(30000);
+  	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	Vertices.SetNumZeroed(20000);
-	Triangles.SetNum(30000);
-	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	//MeshComponent->CreateMeshSection<MyVertex>(0, Vertices, Triangles, false, EUpdateFrequency::Frequent);
+	//GenerateBoxMesh(FVector(100, 100, 100), Vertices, Positions, VertexData, Triangles);
 
+	MeshComponent->CreateMeshSection<MyVertex>(0, Vertices, Triangles, false, EUpdateFrequency::Frequent);
+	MeshComponent->CreateMeshSectionDualBuffer<MyDualVertex>(1, Positions, VertexData, Triangles, false, EUpdateFrequency::Frequent);
 
 
 }
@@ -72,12 +87,14 @@ void APhysicalActor::Tick( float DeltaTime )
 		Direction *= -1;
 
 
-	//GenerateBoxMesh(FVector(100 + (Size * 50), 100 + (Size * 50), 100 + (Size * 50)), Vertices, Triangles);
+// 	GenerateBoxMesh(FVector(100 + (Size * 50), 100 + (Size * 50), 100 + (Size * 50)), Vertices, Positions, VertexData, Triangles);
+// 
+ 	TArray<MyVertex> TempVertices = Vertices;
+ 	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	TArray<MyVertex> TempVertices = Vertices;
-	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
-	//MeshComponent->UpdateMeshSection<MyVertex>(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
+	MeshComponent->UpdateMeshSection<MyVertex>(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
+	MeshComponent->UpdateMeshSectionPositionsImmediate<MyDualVertex>(1, Positions, BoundingBox);
 
 
 	Super::Tick( DeltaTime );

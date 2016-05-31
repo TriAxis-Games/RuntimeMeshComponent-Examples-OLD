@@ -7,6 +7,7 @@
 #include "PhysicalActor.generated.h"
 
 typedef FRuntimeMeshVertex<1> MyVertex;
+typedef FRuntimeMeshVertex<1, false, false> MyDualVertex;
 
 UCLASS()
 class RUNTIMEMESH_EXAMPLES_API APhysicalActor : public AActor
@@ -30,5 +31,7 @@ public:
 	int Direction = 1;
 
 	TArray<MyVertex> Vertices;
+	TArray<FVector> Positions;
+	TArray<MyDualVertex> VertexData;
 	TArray<int32> Triangles;
 };
