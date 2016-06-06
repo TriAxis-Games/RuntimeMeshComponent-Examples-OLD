@@ -147,8 +147,8 @@ void APhysicalActor::Tick( float DeltaTime )
  	static FBox BoundingBox(FVector(-100, -100, -100), FVector(100, 100, 100));
 
 
-	MeshComponent->UpdateMeshSection<MyVertex>(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
-	MeshComponent->UpdateMeshSectionPositionsImmediate<MyDualVertex>(1, Positions, BoundingBox);
+	MeshComponent->UpdateMeshSection(0, TempVertices, BoundingBox, ESectionUpdateFlags::MoveArrays);
+	MeshComponent->UpdateMeshSectionPositionsImmediate(1, Positions, BoundingBox);
 
 
 	Super::Tick( DeltaTime );
