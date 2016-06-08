@@ -30,8 +30,8 @@ public:
 	
 	void Generate();
 
-	float CurrentAnimationFrameX = 0.0f;
-	float CurrentAnimationFrameY = 0.0f;
+	float AnimationOffsetX = 0.0f;
+	float AnimationOffsetY = 0.0f;
 
 	int32 HalfWidth = 20;
 

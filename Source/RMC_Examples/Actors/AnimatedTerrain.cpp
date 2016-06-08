@@ -57,12 +57,11 @@ void AAnimatedTerrain::Tick( float DeltaTime )
 		Generate();
 	}
 
-	float ScaleFactor = 1.0f;
-	float AnimationSpeedX = 4.0f; 
-	float AnimationSpeedY = 4.5f;
+	float AnimationStepX = 5; 
+	float AnimationStepY = 6;
 	
-	CurrentAnimationFrameX += DeltaTime * AnimationSpeedX;
-	CurrentAnimationFrameY += DeltaTime * AnimationSpeedY;
+	AnimationOffsetX += DeltaTime * AnimationStepX;
+	AnimationOffsetY += DeltaTime * AnimationStepY;
 	
 
 	int32 Index = 0;
@@ -70,11 +69,9 @@ void AAnimatedTerrain::Tick( float DeltaTime )
 	{
 		for (int32 XIndex = -HalfWidth; XIndex < HalfWidth; XIndex++)
 		{
-			float ValueOne = FMath::Cos((XIndex + CurrentAnimationFrameX)*ScaleFactor) + FMath::Sin((YIndex + CurrentAnimationFrameY)*ScaleFactor);
-			float ValueTwo = FMath::Cos((XIndex + CurrentAnimationFrameX*0.7f)*ScaleFactor*2.5f) + FMath::Sin((YIndex - CurrentAnimationFrameY*0.7f)*ScaleFactor*2.5f);
+			float Scale = FMath::Cos(XIndex + AnimationOffsetX) + FMath::Sin(YIndex + AnimationOffsetY);
 
-
-			Positions[Index++].Z = ((ValueOne + ValueTwo) / 2) * Height;
+			Positions[Index++].Z = Scale * Height;
 		}
 	}
 
