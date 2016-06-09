@@ -12,10 +12,8 @@ class RMC_EXAMPLES_API AAnimatedTerrain : public ARuntimeMeshObjectBase
 	GENERATED_BODY()
 	
 public:	
+	bool bGenerated;
 	FBox BoundingBox;
-	TArray<FVector> Positions;
-	TArray<FRuntimeMeshVertexNoPosition> VertexData;
-	TArray<int32> Triangles;
 
 	// Sets default values for this actor's properties
 	AAnimatedTerrain();
@@ -33,8 +31,8 @@ public:
 	float AnimationOffsetX = 0.0f;
 	float AnimationOffsetY = 0.0f;
 
-	int32 HalfWidth = 20;
+	int32 HalfWidth = 400;
 
-	float CellSize = 50;
+	float CellSize = 5;
 	float Height = 20;
 };
