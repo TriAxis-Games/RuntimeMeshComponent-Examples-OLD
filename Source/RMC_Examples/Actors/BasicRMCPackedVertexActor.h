@@ -15,9 +15,12 @@ class RMC_EXAMPLES_API ABasicRMCPackedVertexActor : public ARuntimeMeshObjectBas
 
 		void OnConstruction(const FTransform& Transform) override;
 
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	/* Helper to generate a box mesh and convert it to FRuntimeMeshVertexSimple */
 	void CreateBoxMesh(const FVector& Size, TArray<FRuntimeMeshVertexSimple>& Vertices, TArray<int32>& Triangles);
 	
+	void Generate();
 	
 };

@@ -30,14 +30,29 @@ void ABasicRMCPackedVertexActor::CreateBoxMesh(const FVector& Size, TArray<FRunt
 	}
 }
 
-
-void ABasicRMCPackedVertexActor::OnConstruction(const FTransform& Transform)
+void ABasicRMCPackedVertexActor::Generate()
 {
 	TArray<FRuntimeMeshVertexSimple> Vertices;
 	TArray<int32> Triangles;
-	
+
 	CreateBoxMesh(FVector(100, 100, 100), Vertices, Triangles);
 
 	// Create the mesh section  (also enables collision, and sets the section update frequency to infrequent)
 	RuntimeMesh->CreateMeshSection(0, Vertices, Triangles, true, EUpdateFrequency::Infrequent);
 }
+
+void ABasicRMCPackedVertexActor::BeginPlay()
+{
+	// These types of sections can't be serialized currently.
+	// So check if it was already created and if not create it now
+	if (!RuntimeMesh->DoesSectionExist(0))
+	{
+		Generate();
+	}
+}
+
+void ABasicRMCPackedVertexActor::OnConstruction(const FTransform& Transform)
+{
+	Generate();
+}
+
