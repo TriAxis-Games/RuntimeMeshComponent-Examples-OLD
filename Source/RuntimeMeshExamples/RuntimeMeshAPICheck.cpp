@@ -23,12 +23,7 @@ struct FRuntimeMeshComponentAPIChecker
 		TArray<FColor> Colors;
 		TArray<FRuntimeMeshTangent> Tangents;
 		TArray<int32> Triangles;
-
-		Mesh->CreateMeshSection<FRuntimeMeshVertexSimple, int32>(0);
-		Mesh->CreateMeshSectionDualBuffer<FVector, FRuntimeMeshVertexNoPosition, int32>(0);
-		Mesh->CreateMeshSectionTripleBuffer<FVector, FRuntimeMeshVertexNoPositionOrColor, FColor, int32>(0);
-
-
+				
 		Mesh->CreateMeshSection(0, SimpleVerts, Triangles);
 		Mesh->CreateMeshSection(0, SimpleVerts, Triangles, FBox());
 		Mesh->CreateMeshSectionDualBuffer(0, Vectors, NoPositionVerts, Triangles);

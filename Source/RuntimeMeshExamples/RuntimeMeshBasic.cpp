@@ -4,6 +4,9 @@
 #include "RuntimeMeshComponent.h"
 #include "RuntimeMeshShapeGenerator.h"
 #include "RuntimeMeshBuilder.h"
+#include "RuntimeMeshLibrary.h"
+#include "RuntimeMeshData.h"
+#include "RuntimeMesh.h"
 
 
 // Sets default values
@@ -15,65 +18,48 @@ ARuntimeMeshBasic::ARuntimeMeshBasic()
 
 }
 
-void ARuntimeMeshBasic::OnConstruction(const FTransform& Transform)
+
+
+void ARuntimeMeshBasic::GenerateMeshes_Implementation()
 {
-	FRuntimeMeshBuilder Builder = MakeRuntimeMeshBuilder<FVector, FRuntimeMeshVertexNoPosition, uint16>();
-	
-	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Builder);
+/*	TSharedPtr<FRuntimeMeshBuilder> Builder = MakeRuntimeMeshBuilder<FRuntimeMeshTangentsHighPrecision, FRuntimeMeshDualUV, uint16>();*/
 
-	GetRuntimeMeshComponent()->CreateMeshSection(0, Builder, true, EUpdateFrequency::Infrequent);
+FRuntimeMeshDataPtr Data = GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->GetRuntimeMeshData();
 
-// 	TArray<FRuntimeMeshVertexSimple> Vertices;
-// 	TArray<int32> Triangles;
+Data->CreateMeshSection(0, false, false, 1, false, true, EUpdateFrequency::Average);
+
+auto Section = Data->BeginSectionUpdate(0);
+
+URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, *Section.Get());
+
+Section->Commit();
+
+
+TArray<FRuntimeMeshVertexSimple> Vertices;
+TArray<int32> Triangles;
+URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Vertices, Triangles);
+
+Data->CreateMeshSection(0, Vertices, Triangles, true);
+
+
+Data->UpdateMeshSection(0, Vertices, Triangles);
+
+// 	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Builder);
 // 
-// 	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Vertices, Triangles);
+// 	FVector4 TestNormal = Builder->GetNormal(0);
+// 	FVector TestTangent = Builder->GetTangent(0);
 // 
-// 	GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->CreateMeshSection<FRuntimeMeshVertexSimple, int32>(0, true, EUpdateFrequency::Infrequent);
+// 	GetRuntimeMeshComponent()->CreateMeshSection(0, Builder, true, EUpdateFrequency::Infrequent);
 
 
-	//GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->CreateMeshSection(0, Vertices, Triangles, true, EUpdateFrequency::Infrequent);
-}
-
-DECLARE_RUNTIME_MESH_VERTEX(FTestVertex, false, true, true, false, 1, ERuntimeMeshVertexTangentBasisType::Default, ERuntimeMeshVertexUVType::Default);
-
-
-
-// Called when the game starts or when spawned
-void ARuntimeMeshBasic::BeginPlay()
-{
-// 	TArray<FRuntimeMeshVertexSimple> Vertices;
-// 	TArray<int32> Triangles;
+// 	TSharedPtr<FRuntimeMeshBuilder> Builder2 = MakeRuntimeMeshBuilder<FVector, FRuntimeMeshVertexNoPosition, uint16>();
+// 	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize * 0.75, Builder2);
 // 
-// 	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize * 2, Vertices, Triangles);
 // 
-// 	GetRuntimeMeshComponent()->GetRuntimeMesh()->UpdateMeshSection(0, Vertices, Triangles);
+// 	GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->GetRuntimeMeshData()->CreateMeshSectionDualBuffer<FVector, FRuntimeMeshVertexNoPosition, uint16>(0, false, EUpdateFrequency::Infrequent, 2);
+// 	GetRuntimeMeshComponent()->GetRuntimeMesh()->GetRuntimeMeshData()->UpdateMeshSectionLOD(0, 0, Builder);
+// 	GetRuntimeMeshComponent()->GetRuntimeMesh()->GetRuntimeMeshData()->UpdateMeshSectionLOD(0, 1, Builder2);
 
-	FRuntimeMeshBuilder Builder = MakeRuntimeMeshBuilder<FVector, FRuntimeMeshVertexNoPosition, uint16>();
-
-	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Builder);
-
-	GetRuntimeMeshComponent()->UpdateMeshSection(0, MoveTemp(Builder));
-
-
-	FRuntimeMeshDataPtr MesHData = GetRuntimeMeshComponent()->GetRuntimeMesh()->GetRuntimeMeshData();
-
-	// Open section 0 in a scoped update
-	{	
-// 		FRuntimeMeshScopedUpdater MeshSection(MesHData, 0);
-// 				
-// 		MeshSection.SetPosition(0, FVector(15, 0, 0));
-// 		MeshSection.SetColor(12, FColor::Blue);
-
-	}
-
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ARuntimeMeshBasic::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+//GetRuntimeMeshComponent()->GetRuntimeMesh()->GetRuntimeMeshData()->CreateMeshSection(0, Builder, true, EUpdateFrequency::Infrequent, ESectionUpdateFlags::CalculateNormalTangentHard
 }
 

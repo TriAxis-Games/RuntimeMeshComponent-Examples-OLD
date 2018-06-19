@@ -22,15 +22,7 @@ public:
 	FVector BoxSize;
 
 protected:
-	virtual void OnConstruction(const FTransform& Transform) override;
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	
+	virtual void GenerateMeshes_Implementation() override;
 	
 };

@@ -12,7 +12,7 @@ public class RuntimeMeshExamples : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "RuntimeMeshComponent" });
+        PublicDependencyModuleNames.AddRange(new string[] { "RuntimeMeshComponent", "RenderCore" });
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
