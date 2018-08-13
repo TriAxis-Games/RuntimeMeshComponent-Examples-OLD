@@ -25,6 +25,7 @@ void ARuntimeMeshBasic::GenerateMeshes_Implementation()
 /*	TSharedPtr<FRuntimeMeshBuilder> Builder = MakeRuntimeMeshBuilder<FRuntimeMeshTangentsHighPrecision, FRuntimeMeshDualUV, uint16>();*/
 
 FRuntimeMeshDataPtr Data = GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->GetRuntimeMeshData();
+Data->EnterSerializedMode();
 
 Data->CreateMeshSection(0, false, false, 1, false, true, EUpdateFrequency::Average);
 
@@ -33,16 +34,16 @@ auto Section = Data->BeginSectionUpdate(0);
 URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, *Section.Get());
 
 Section->Commit();
-
-
-TArray<FRuntimeMeshVertexSimple> Vertices;
-TArray<int32> Triangles;
-URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Vertices, Triangles);
-
-Data->CreateMeshSection(0, Vertices, Triangles, true);
-
-
-Data->UpdateMeshSection(0, Vertices, Triangles);
+//
+//
+//TArray<FRuntimeMeshVertexSimple> Vertices;
+//TArray<int32> Triangles;
+//URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Vertices, Triangles);
+//
+//Data->CreateMeshSection(0, Vertices, Triangles, true);
+//
+//
+//Data->UpdateMeshSection(0, Vertices, Triangles);
 
 // 	URuntimeMeshShapeGenerator::CreateBoxMesh(BoxSize, Builder);
 // 
