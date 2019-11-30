@@ -1,6 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "RuntimeMeshExamples.h"
 #include "Modules/ModuleManager.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, RuntimeMeshExamples, "RuntimeMeshExamples" );
+ 
