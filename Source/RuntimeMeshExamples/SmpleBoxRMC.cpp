@@ -1,8 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2016-2019 Chris Conway (Koderz). All Rights Reserved.
 
 
 #include "SmpleBoxRMC.h"
 #include "Providers/RuntimeMeshProviderBox.h"
+#include "Providers/RuntimeMeshProviderMemoryCache.h"
+#include "Providers/RuntimeMeshProviderStatic.h"
 #include "Materials/Material.h"
 
 // Sets default values
@@ -32,6 +34,7 @@ void ASmpleBoxRMC::GenerateMeshes_Implementation()
 	URuntimeMeshProviderBox* CubeProvider = NewObject<URuntimeMeshProviderBox>(this);
 	CubeProvider->BoxRadius = FVector(100, 100, 100);
 	CubeProvider->Material = UMaterial::GetDefaultMaterial(MD_Surface);
+
 	GetRuntimeMeshComponent()->GetOrCreateRuntimeMesh()->Initialize(CubeProvider);
 }
 

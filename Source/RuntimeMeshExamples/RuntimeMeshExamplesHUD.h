@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright 2016-2019 Chris Conway (Koderz). All Rights Reserved.
 
 #pragma once 
 
