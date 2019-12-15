@@ -10,6 +10,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
+#include "RuntimeMeshComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -140,6 +141,26 @@ void ARuntimeMeshExamplesCharacter::SetupPlayerInputComponent(class UInputCompon
 
 void ARuntimeMeshExamplesCharacter::OnFire()
 {
+	FVector Offset = FP_MuzzleLocation->GetComponentRotation().RotateVector(FVector::ForwardVector * 100);
+	const FRotator SpawnRotation = GetControlRotation();
+	FVector StartPosition = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+	FVector EndPosition = StartPosition + SpawnRotation.RotateVector(FVector::ForwardVector * 100 * 25);
+
+
+
+	FHitResult HitResult;
+	FCollisionQueryParams Params = FCollisionQueryParams::DefaultQueryParam;
+	Params.bReturnFaceIndex = true;
+	if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartPosition, EndPosition, FCollisionObjectQueryParams::AllObjects, Params))
+	{
+		URuntimeMeshComponent* RMC = Cast<URuntimeMeshComponent>(HitResult.Component);
+		if (RMC)
+		{
+			FRuntimeMeshCollisionHitInfo HitSource = RMC->GetHitSource(HitResult.FaceIndex);
+			UE_LOG(LogTemp, Warning, TEXT("Type: %d; Section: %d; FaceIndex: %d"), HitSource.SourceType, HitSource.SectionId, HitSource.FaceIndex);
+		}
+	}
+
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
 	{
