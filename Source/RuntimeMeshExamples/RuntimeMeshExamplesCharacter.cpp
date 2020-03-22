@@ -169,22 +169,22 @@ void ARuntimeMeshExamplesCharacter::OnFire()
 		{
 			if (bUsingMotionControllers)
 			{
-				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<ARuntimeMeshExamplesProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+				const FRotator SpawnR = VR_MuzzleLocation->GetComponentRotation();
+				const FVector SpawnL = VR_MuzzleLocation->GetComponentLocation();
+				World->SpawnActor<ARuntimeMeshExamplesProjectile>(ProjectileClass, SpawnL, SpawnR);
 			}
 			else
 			{
-				const FRotator SpawnRotation = GetControlRotation();
+				const FRotator SpawnR = GetControlRotation();
 				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+				const FVector SpawnL = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnR.RotateVector(GunOffset);
 
 				//Set Spawn Collision Handling Override
 				FActorSpawnParameters ActorSpawnParams;
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 				// spawn the projectile at the muzzle
-				World->SpawnActor<ARuntimeMeshExamplesProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				World->SpawnActor<ARuntimeMeshExamplesProjectile>(ProjectileClass, SpawnL, SpawnR, ActorSpawnParams);
 			}
 		}
 	}
